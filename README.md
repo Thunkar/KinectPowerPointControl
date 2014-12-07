@@ -21,14 +21,17 @@ How to use it:
 4) From now on, use the following voice commands:
 
 First of all:
+
 	Cortana, activa el control por voz (turns on voice recognition)
+
+And then:
 
 	Cortana, abre la presentación (starts the slideshow)
 	Cortana, cierra la presentación (closes the slideshow)
 	Cortana, muestra la ventana (shows the app in the secondary screen, if any)
 	Cortana, minimiza la ventana (hides the app)
 	
-Once you are done and don't want the voice control to be triggered unnintentionally
+Once you are done and don't want the voice control to be triggered unnintentionally:
 
 	Cortana, desactiva el control por voz (turns off voice recognition)
 	
