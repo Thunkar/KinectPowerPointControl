@@ -1,0 +1,79 @@
+﻿<Page x:Class="KinectPowerPointControl.View.MainView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:vm="clr-namespace:KinectPowerPointControl.ViewModel"
+      xmlns:converters="clr-namespace:KinectPowerPointControl.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="1300"
+	Title="MainView">
+    <Page.Resources>
+        <vm:MainViewModel x:Key="MainViewModel"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:KinectCoordinatesConverter x:Key="KinectCoordinatesConverter"/>
+        <converters:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
+        <converters:TextToIntConverter x:Key="TextToIntConverter"/>
+    </Page.Resources>
+    <Grid DataContext="{StaticResource MainViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Tilt angle" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Button x:Name="AngleDecrease" Content="&lt;" Click="AngleDecrease_Click"/>
+                <TextBlock x:Name="TiltAngle" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center" Text="{Binding KinectHandler.Tilt, Mode=TwoWay, Converter={StaticResource TextToIntConverter}}"/>
+                <Button x:Name="AngleIncrease" Content="&gt;" Click="AngleIncrease_Click"/>
+            </StackPanel>
+            <Image Grid.Row="1" Width="640" Height="480"  Source="{Binding KinectHandler.ImageFromKinect}"/>
+            <ProgressBar Grid.Row="1" VerticalAlignment="Top" Height="10" IsIndeterminate="{Binding KinectHandler.Busy}" Visibility="{Binding KinectHandler.Busy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Canvas Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="640" Height="480" Background="Transparent">
+                <Ellipse Fill="Blue" 
+                     Height="{Binding KinectGestureProcessor.EllipseSize}" 
+                     Width="{Binding KinectGestureProcessor.EllipseSize}" 
+                     Canvas.Top="{Binding KinectGestureProcessor.HeadPosition, Converter={StaticResource KinectCoordinatesConverter}, ConverterParameter=Y}" 
+                     Canvas.Left="{Binding KinectGestureProcessor.HeadPosition, Converter={StaticResource KinectCoordinatesConverter}, ConverterParameter=X}" 
+                     Stroke="White"/>
+                <Ellipse Fill="{Binding KinectGestureProcessor.LeftGrip, Converter={StaticResource BooleanToColorConverter}}" 
+                     Height="{Binding KinectGestureProcessor.EllipseSize}" 
+                     Width="{Binding KinectGestureProcessor.EllipseSize}" 
+                     Canvas.Top="{Binding KinectGestureProcessor.LeftHandPosition, Converter={StaticResource KinectCoordinatesConverter}, ConverterParameter=Y}" 
+                     Canvas.Left="{Binding KinectGestureProcessor.LeftHandPosition, Converter={StaticResource KinectCoordinatesConverter}, ConverterParameter=X}" 
+                     Stroke="White"/>
+                <Ellipse Fill="{Binding KinectGestureProcessor.RightGrip, Converter={StaticResource BooleanToColorConverter}}" 
+                     Height="{Binding KinectGestureProcessor.EllipseSize}" 
+                     Width="{Binding KinectGestureProcessor.EllipseSize}" 
+                     Canvas.Top="{Binding KinectGestureProcessor.RightHandPosition, Converter={StaticResource KinectCoordinatesConverter}, ConverterParameter=Y}" 
+                     Canvas.Left="{Binding KinectGestureProcessor.RightHandPosition, Converter={StaticResource KinectCoordinatesConverter}, ConverterParameter=X}" 
+                     Stroke="White"/>
+            </Canvas>
+        </Grid>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center">
+            <Button x:Name="OpenPPT" Click="OpenPPT_Click">
+                <Button.Content>
+                    <TextBlock Text="Open presentation" Style="{StaticResource ButtonContent}"/>
+                </Button.Content>
+            </Button>
+            <Button x:Name="ClosePPT" Click="ClosePPT_Click">
+                <Button.Content>
+                    <TextBlock Text="Close presentation" Style="{StaticResource ButtonContent}"/>
+                </Button.Content>
+            </Button>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox TextWrapping="NoWrap" Text="{Binding PowerPointConnector.File}" FontSize="18" MaxLines="5" Margin="10,10,0,10"/>
+                <Button x:Name="Browse" Grid.Column="1" Content="Browse" HorizontalAlignment="Right" FontSize="18" Margin="0, 10" Click="Browse_Click"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Page>
