@@ -27,24 +27,17 @@ namespace KinectPowerPointControl.Model
         }
 
         private Presentation presentation;
-        private Microsoft.Office.Interop.PowerPoint.Application ppApp;
+        private Microsoft.Office.Interop.PowerPoint.Application powerPointApp;
 
 
         public void OpenPresentation()
         {
             if (File == null || file == string.Empty) return;
-            ppApp = new Microsoft.Office.Interop.PowerPoint.Application();
-            ppApp.Visible = MsoTriState.msoTrue;
-            Presentations ppPresens = ppApp.Presentations; 
-            presentation = ppPresens.Open(File, MsoTriState.msoFalse, MsoTriState.msoTrue, MsoTriState.msoTrue);
-            Slides objSlides = presentation.Slides;
-            Microsoft.Office.Interop.PowerPoint.SlideShowWindows objSSWs; 
-            Microsoft.Office.Interop.PowerPoint.SlideShowSettings objSSS;
-            //Run the Slide show
-            objSSS = presentation.SlideShowSettings;
-            objSSS.Run();
-            objSSWs = ppApp.SlideShowWindows;
-            Maximize();
+            powerPointApp = new Microsoft.Office.Interop.PowerPoint.Application();
+            powerPointApp.Visible = MsoTriState.msoTrue;
+            Presentations Presentations = powerPointApp.Presentations; 
+            presentation = Presentations.Open(File, MsoTriState.msoFalse, MsoTriState.msoTrue, MsoTriState.msoTrue);
+            presentation.SlideShowSettings.Run();
         }
 
         public void ClosePresentation()
@@ -58,8 +51,8 @@ namespace KinectPowerPointControl.Model
                 presentation.Close();
                 Marshal.ReleaseComObject(presentation);
 
-                ppApp.Quit();
-                Marshal.ReleaseComObject(ppApp);
+                powerPointApp.Quit();
+                Marshal.ReleaseComObject(powerPointApp);
             }
             catch(Exception e)
             {
@@ -67,16 +60,10 @@ namespace KinectPowerPointControl.Model
             }
         }
 
-        public void Maximize()
-        {
-            presentation.SlideShowWindow.Activate();
-            presentation.SlideShowWindow.Application.WindowState = Microsoft.Office.Interop.PowerPoint.PpWindowState.ppWindowMaximized;
-            presentation.SlideShowSettings.Application.WindowState = Microsoft.Office.Interop.PowerPoint.PpWindowState.ppWindowMaximized;
-        }
 
         public void Activate()
         {
-            presentation.SlideShowWindow.Activate();
+            presentation.SlideShowSettings.Application.Activate();
         }
 
         public void NotifyPropertyChanged(string property)
