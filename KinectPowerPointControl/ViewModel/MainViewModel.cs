@@ -82,6 +82,7 @@ namespace KinectPowerPointControl.ViewModel
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     ShowWindow();
+                    PowerPointConnector.Activate();
                 }));
                 SpeechRecognitionHandler.synth.SpeakAsync("Mostrando ventana");
             }
@@ -90,6 +91,7 @@ namespace KinectPowerPointControl.ViewModel
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     HideWindow();
+                    PowerPointConnector.Activate();
                 }));
                 SpeechRecognitionHandler.synth.SpeakAsync("Minimizando ventana");
             }

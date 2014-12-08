@@ -63,7 +63,7 @@ namespace KinectPowerPointControl.Model
 
         public void Activate()
         {
-            presentation.SlideShowSettings.Application.Activate();
+            presentation.SlideShowWindow.Activate();
         }
 
         public void NotifyPropertyChanged(string property)
