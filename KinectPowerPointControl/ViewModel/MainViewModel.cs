@@ -67,12 +67,13 @@ namespace KinectPowerPointControl.ViewModel
             {
                 SpeechRecognitionHandler.synth.SpeakAsync("Abriendo la presentación");
                 OpenPresentation();
+                PowerPointConnector.Activate();
             }
             if (command == "Cortana, cierra la presentación")
             {
+                PowerPointConnector.ClosePresentation();
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    PowerPointConnector.ClosePresentation();
                     ShowWindow();
                 }));
                 SpeechRecognitionHandler.synth.SpeakAsync("Cerrando presentación");
@@ -82,16 +83,16 @@ namespace KinectPowerPointControl.ViewModel
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     ShowWindow();
-                    PowerPointConnector.Activate();
                 }));
+                PowerPointConnector.Activate();
                 SpeechRecognitionHandler.synth.SpeakAsync("Mostrando ventana");
             }
             if (command == "Cortana, minimiza la ventana")
             {
+                PowerPointConnector.Activate();
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     HideWindow();
-                    PowerPointConnector.Activate();
                 }));
                 SpeechRecognitionHandler.synth.SpeakAsync("Minimizando ventana");
             }

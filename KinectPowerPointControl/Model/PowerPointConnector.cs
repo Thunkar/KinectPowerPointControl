@@ -25,6 +25,16 @@ namespace KinectPowerPointControl.Model
                 NotifyPropertyChanged("File");
             }
         }
+        [DllImport("User32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, int show);
+        [DllImport("User32.dll", SetLastError = true)]
+        public static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
+        [DllImport("User32.dll", SetLastError = true)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+ 
+        private const int SW_SHOW = 5;
+
+
 
         private Presentation presentation;
         private Microsoft.Office.Interop.PowerPoint.Application powerPointApp;
@@ -63,7 +73,15 @@ namespace KinectPowerPointControl.Model
 
         public void Activate()
         {
-            presentation.SlideShowWindow.Activate();
+            if(presentation != null)
+            {
+                presentation.SlideShowWindow.Activate();
+                IntPtr handle = (IntPtr)presentation.SlideShowWindow.HWND;
+                ShowWindow(handle, SW_SHOW);
+                SetForegroundWindow(handle);
+                SwitchToThisWindow(handle, true);
+            }
+                
         }
 
         public void NotifyPropertyChanged(string property)
