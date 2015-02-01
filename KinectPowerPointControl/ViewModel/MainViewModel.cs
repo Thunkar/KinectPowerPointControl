@@ -48,17 +48,17 @@ namespace KinectPowerPointControl.ViewModel
 
         void recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            if (e.Result.Text == "Cortana, activa el control por voz" && e.Result.Confidence >= 0.6)
+            if (e.Result.Text == "Cortana, activa el control por voz" && e.Result.Confidence >= 0.7)
             {
                 SpeechRecognitionHandler.synth.SpeakAsync("Control por voz activado");
                 SpeechRecognitionHandler.VoiceControlActivated = true;
             }
-            if (e.Result.Text == "Cortana, desactiva el control por voz" && e.Result.Confidence >= 0.6)
+            if (e.Result.Text == "Cortana, desactiva el control por voz" && e.Result.Confidence >= 0.65)
             {
                 SpeechRecognitionHandler.synth.SpeakAsync("Control por voz desactivado");
                 SpeechRecognitionHandler.VoiceControlActivated = false;
             }
-            if (SpeechRecognitionHandler.VoiceControlActivated == true && e.Result.Confidence >= 0.6) voiceControlHandler(e.Result.Text);
+            if (SpeechRecognitionHandler.VoiceControlActivated == true && e.Result.Confidence >= 0.65) voiceControlHandler(e.Result.Text);
         }
 
         public void voiceControlHandler(String command)
@@ -228,7 +228,6 @@ namespace KinectPowerPointControl.ViewModel
                 }
 
             }
-            KinectGestureProcessor.UpdateState();
         }
 
 
@@ -307,6 +306,23 @@ namespace KinectPowerPointControl.ViewModel
                 KinectGestureProcessor.HeadPosition = head.Position;
                 KinectGestureProcessor.LeftHandPosition = leftHand.Position;
                 KinectGestureProcessor.RightHandPosition = rightHand.Position;
+                if(rightHand.Position.Y < head.Position.Y - 0.45)
+                {
+                    KinectGestureProcessor.RightUp = false;
+                }
+                else
+                {
+                    KinectGestureProcessor.RightUp = true;
+                }
+
+                if (leftHand.Position.Y < head.Position.Y - 0.45)
+                {
+                    KinectGestureProcessor.LeftUp = false;
+                }
+                else
+                {
+                    KinectGestureProcessor.LeftUp = true;
+                }
 
                 if (rightHand.Position.X > head.Position.X + 0.45)
                 {

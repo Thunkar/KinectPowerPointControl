@@ -14,13 +14,76 @@
         <converters:KinectCoordinatesConverter x:Key="KinectCoordinatesConverter"/>
         <converters:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
         <converters:TextToIntConverter x:Key="TextToIntConverter"/>
+        <converters:GestureToStringConverter x:Key="GestureToStringConverter"/>
+        <Style TargetType="TextBlock" x:Key="h1">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="21"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="h2">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="p">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
     </Page.Resources>
     <Grid DataContext="{StaticResource MainViewModel}">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid>
+        <StackPanel Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <TextBlock Text="Gesture Status" FontSize="32"/>
+            <Grid Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Left hand status" Style="{StaticResource h1}"/>
+                <TextBlock Grid.Column="1" Style="{StaticResource p}" Text="{Binding KinectGestureProcessor.CurrentLeftState, Converter={StaticResource GestureToStringConverter}}"/>
+                <TextBlock Text="Left separated" Grid.Row="1" Style="{StaticResource h2}"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource p}" Foreground="{Binding KinectGestureProcessor.LeftSeparated, Converter={StaticResource BooleanToColorConverter}}" Text="{Binding KinectGestureProcessor.LeftSeparated}"/>
+                <TextBlock Text="Left grip" Grid.Row="2" Style="{StaticResource h2}"/>
+                <TextBlock Grid.Column="1" Grid.Row="2" Style="{StaticResource p}" Foreground="{Binding KinectGestureProcessor.LeftGrip, Converter={StaticResource BooleanToColorConverter}}" Text="{Binding KinectGestureProcessor.LeftGrip}"/>
+                <TextBlock Text="Left up" Grid.Row="3" Style="{StaticResource h2}"/>
+                <TextBlock Grid.Column="1" Grid.Row="3" Style="{StaticResource p}" Foreground="{Binding KinectGestureProcessor.LeftUp, Converter={StaticResource BooleanToColorConverter}}" Text="{Binding KinectGestureProcessor.LeftUp}"/>
+            </Grid>
+            <Grid Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Right hand status" Grid.Row="0" Style="{StaticResource h1}"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource p}" Text="{Binding KinectGestureProcessor.CurrentRightState, Converter={StaticResource GestureToStringConverter}}"/>
+                <TextBlock Text="Right separated" Grid.Row="1" Style="{StaticResource h2}"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource p}" Foreground="{Binding KinectGestureProcessor.RightSeparated, Converter={StaticResource BooleanToColorConverter}}" Text="{Binding KinectGestureProcessor.RightSeparated}"/>
+                <TextBlock Text="Right grip" Grid.Row="2" Style="{StaticResource h2}"/>
+                <TextBlock Grid.Column="1" Grid.Row="2"  Style="{StaticResource p}" Foreground="{Binding KinectGestureProcessor.RightGrip, Converter={StaticResource BooleanToColorConverter}}" Text="{Binding KinectGestureProcessor.RightGrip}"/>
+                <TextBlock Text="Right up" Grid.Row="3" Style="{StaticResource h2}"/>
+                <TextBlock Grid.Column="1" Grid.Row="3"  Style="{StaticResource p}" Foreground="{Binding KinectGestureProcessor.RightUp, Converter={StaticResource BooleanToColorConverter}}" Text="{Binding KinectGestureProcessor.RightUp}"/>
+            </Grid>
+        </StackPanel>
+        <Grid VerticalAlignment="Center" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -55,7 +118,7 @@
                      Stroke="White"/>
             </Canvas>
         </Grid>
-        <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center">
+        <StackPanel Grid.Column="2" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center">
             <Button x:Name="OpenPPT" Click="OpenPPT_Click">
                 <Button.Content>
                     <TextBlock Text="Open presentation" Style="{StaticResource ButtonContent}"/>

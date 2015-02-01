@@ -11,6 +11,6 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <TextBlock Text="Kinect PowerPoint Control" FontSize="72" VerticalAlignment="Center" Margin="20" FontWeight="Bold"/>
-        <Frame x:Name="MainFrame" Margin="20" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="MainFrame" Margin="20" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

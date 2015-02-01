@@ -83,6 +83,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanToColorConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\GestureToStringConverter.cs" />
     <Compile Include="Converters\KinectCoordinatesConverter.cs" />
     <Compile Include="Converters\TextToIntConverter.cs" />
     <Compile Include="Model\GestureDetectedEventArgs.cs" />

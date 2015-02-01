@@ -12,8 +12,32 @@ namespace KinectPowerPointControl.Model
     {
         public enum GestureState { Idle, Separated, Grip, Joined, Done}
 
-        public GestureState CurrentLeftState;
-        public GestureState CurrentRightState;
+        private GestureState currentLeftState;
+        private GestureState currentRightState;
+        public GestureState CurrentLeftState
+        {
+            get
+            {
+                return currentLeftState;
+            }
+            set
+            {
+                currentLeftState = value;
+                NotifyPropertyChanged("CurrentLeftState");
+            }
+        }
+        public GestureState CurrentRightState
+        {
+            get
+            {
+                return currentRightState;
+            }
+            set
+            {
+                currentRightState = value;
+                NotifyPropertyChanged("CurrentRightState");
+            }
+        }
 
         private bool leftGrip;
         public bool LeftGrip
@@ -66,6 +90,33 @@ namespace KinectPowerPointControl.Model
             {
                 rightSeparated = value;
                 NotifyPropertyChanged("RightSeparated");
+            }
+        }
+
+        private bool leftUp;
+        public bool LeftUp
+        {
+            get
+            {
+                return leftUp;
+            }
+            set
+            {
+                leftUp = value;
+                NotifyPropertyChanged("LeftUp");
+            }
+        }
+        private bool rightUp;
+        public bool RightUp
+        {
+            get
+            {
+                return rightUp;
+            }
+            set
+            {
+                rightUp = value;
+                NotifyPropertyChanged("RightUp");
             }
         }
 
@@ -125,6 +176,11 @@ namespace KinectPowerPointControl.Model
             }
         }
 
+        private int leftStateCounter = 0;
+        private int rightStateCounter = 0;
+
+        private const int THRESHOLD = 5;
+
 
 
         public event GestureDetectedEventHandler GestureDetected;
@@ -137,52 +193,98 @@ namespace KinectPowerPointControl.Model
 
         private void UpdateLeftState()
         {
+            if(!LeftUp)
+            {
+                CurrentLeftState = GestureState.Idle;
+                return;
+            }
             switch(CurrentLeftState)
             {
                 case GestureState.Idle:
-                    if (LeftSeparated && !LeftGrip)
+                    if(leftStateCounter == THRESHOLD)
+                    {
                         CurrentLeftState = GestureState.Separated;
+                        leftStateCounter = 0;
+                    }
+                    else if (LeftSeparated && !LeftGrip)
+                    {
+                        leftStateCounter++;
+                    }
                     else
+                    {
                         CurrentLeftState = GestureState.Idle;
+                        leftStateCounter = 0;
+                    }
                     break;
                 case GestureState.Separated:
                     if (LeftSeparated && !LeftGrip)
                     {
                         CurrentLeftState = GestureState.Separated;
+                        leftStateCounter = 0;
                         break;
                     }
-                    if (LeftGrip && LeftSeparated)
+                    else if(leftStateCounter == THRESHOLD)
+                    {
                         CurrentLeftState = GestureState.Grip;
+                        leftStateCounter = 0;
+                    }
+                    else if (LeftGrip && LeftSeparated)
+                    {
+                        leftStateCounter++;
+                    }
                     else
+                    {
                         CurrentLeftState = GestureState.Idle;
+                        leftStateCounter = 0;
+                    }
                     break;
                 case GestureState.Grip:
                     if (LeftGrip && LeftSeparated)
                     {
                         CurrentLeftState = GestureState.Grip;
+                        leftStateCounter = 0;
                         break;
                     }
-                    if (!LeftSeparated && LeftGrip)
+                    else if(leftStateCounter == THRESHOLD)
+                    {
                         CurrentLeftState = GestureState.Joined;
+                        leftStateCounter = 0;
+                    }
+                    else if (!LeftSeparated && LeftGrip)
+                    {
+                        leftStateCounter++;
+                    }
                     else
+                    {
                         CurrentLeftState = GestureState.Idle;
+                        leftStateCounter = 0;
+                    }
                     break;
                 case GestureState.Joined:
                     if (!LeftSeparated && LeftGrip)
                     {
                         CurrentLeftState = GestureState.Joined;
+                        leftStateCounter = 0;
                         break;
                     }
-                    if (!LeftGrip && !LeftSeparated)
+                    else if(leftStateCounter == THRESHOLD)
                     {
                         CurrentLeftState = GestureState.Done;
                         if (GestureDetected != null)
                         {
                             GestureDetected(this, new GestureDetectedEventArgs(GestureType.SlideBackwards));
                         }
+                        leftStateCounter = 0;
+                    }
+                    if (!LeftGrip && !LeftSeparated)
+                    {
+                        leftStateCounter++;
                     }
                     else
+                    {
                         CurrentLeftState = GestureState.Idle;
+                        leftStateCounter = 0;
+                    }
                     break;
                 case GestureState.Done:
                     CurrentLeftState = GestureState.Idle;
@@ -192,52 +294,98 @@ namespace KinectPowerPointControl.Model
 
         private void UpdateRightState()
         {
+            if (!RightUp)
+            {
+                CurrentRightState = GestureState.Idle;
+                return;
+            }
             switch (CurrentRightState)
             {
                 case GestureState.Idle:
-                    if (RightSeparated && !RightGrip)
+                    if(rightStateCounter == THRESHOLD)
+                    {
                         CurrentRightState = GestureState.Separated;
+                        rightStateCounter = 0;
+                    }
+                    else if (RightSeparated && !RightGrip)
+                    {
+                        rightStateCounter++;
+                    }
                     else
+                    {
                         CurrentRightState = GestureState.Idle;
+                        rightStateCounter = 0;
+                    }
                     break;
                 case GestureState.Separated:
                     if (RightSeparated && !RightGrip)
                     {
                         CurrentRightState = GestureState.Separated;
+                        rightStateCounter = 0;
                         break;
                     }
-                    if (RightSeparated && RightGrip)
+                    if(rightStateCounter == THRESHOLD)
+                    {
                         CurrentRightState = GestureState.Grip;
+                        rightStateCounter = 0;
+                    }
+                    if (RightSeparated && RightGrip)
+                    {
+                        rightStateCounter++;
+                    }
                     else
-                        CurrentLeftState = GestureState.Idle;
+                    {
+                        CurrentRightState = GestureState.Idle;
+                        rightStateCounter = 0;
+                    }
                     break;
                 case GestureState.Grip:
                     if (RightSeparated && RightGrip)
                     {
                         CurrentRightState = GestureState.Grip;
+                        rightStateCounter = 0;
                         break;
                     }
-                    if (!RightSeparated && RightGrip)
+                    if(rightStateCounter == THRESHOLD)
+                    {
                         CurrentRightState = GestureState.Joined;
+                        rightStateCounter = 0;
+                    }
+                    else if (!RightSeparated && RightGrip)
+                    {
+                        rightStateCounter++;
+                    }
                     else
+                    {
                         CurrentRightState = GestureState.Idle;
+                        rightStateCounter = 0;
+                    }
                     break;
                 case GestureState.Joined:
                     if (!RightSeparated && RightGrip)
                     {
                         CurrentRightState = GestureState.Joined;
+                        rightStateCounter = 0;
                         break;
                     }
-                    if (!RightGrip && !RightSeparated)
+                    if(rightStateCounter == THRESHOLD)
                     {
                         CurrentRightState = GestureState.Done;
                         if (GestureDetected != null)
                         {
                             GestureDetected(this, new GestureDetectedEventArgs(GestureType.SlideForwards));
                         }
+                        rightStateCounter = 0;
+                    }
+                    if (!RightGrip && !RightSeparated)
+                    {
+                        rightStateCounter++;
                     }
                     else
+                    {
                         CurrentRightState = GestureState.Idle;
+                        rightStateCounter = 0;
+                    }
                     break;
                 case GestureState.Done:
                     CurrentRightState = GestureState.Idle;
