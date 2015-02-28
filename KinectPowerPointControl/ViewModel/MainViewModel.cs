@@ -48,7 +48,7 @@ namespace KinectPowerPointControl.ViewModel
 
         void recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            if (e.Result.Text == "Cortana, activa el control por voz" && e.Result.Confidence >= 0.7)
+            if (e.Result.Text == "Cortana, activa el control por voz" && e.Result.Confidence >= 0.65)
             {
                 SpeechRecognitionHandler.synth.SpeakAsync("Control por voz activado");
                 SpeechRecognitionHandler.VoiceControlActivated = true;
